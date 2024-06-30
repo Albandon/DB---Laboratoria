@@ -1,5 +1,5 @@
 # DB using "application" made as an laboratory assigment 
-
+Requires Python 3.12 or greater and poetry 1.8 or greater
 ### Current functionality consists of:
 - adding new Entries
 - exporting the entries as .csv file
