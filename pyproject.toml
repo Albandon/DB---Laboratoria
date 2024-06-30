@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "db-laboratoria"
+version = "1.0"
+description = "Database application"
+authors = ["Alban <albanstudios1@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+validators = "^0.28.3"
+simplejson = "^3.19.2"
+psycopg = "^3.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
