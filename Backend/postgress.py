@@ -1,6 +1,7 @@
 import csv
 import psycopg
 import simplejson
+import random
 
 def Init (conJSON):
     con = psycopg.connect(
@@ -26,10 +27,40 @@ def Init (conJSON):
     c.execute('''CREATE TABLE IF NOT EXISTS Clients (
         Name VARCHAR(30),
         Surname VARCHAR(30),
-        LibraryID INT UNIQUE, 
+        LibraryID INT, 
         LoanedTitle VARCHAR(60) REFERENCES BookList(Title)
         );''')
 
+    con.commit()
+    c.close()
+    con.close()
+
+# dla ułatwienia randomizacji ilość kopii nie będzie zmieniania dodając nowe wpisy do wypożyczeń
+def buildRandomLoanData (n: int, conJSON):
+    con = psycopg.connect(
+        host=conJSON['host'],
+        port=conJSON['port'],
+        user=conJSON['user'],
+        dbname=conJSON['db_name'],
+        password=conJSON['password']
+    )
+    c = con.cursor()
+    c.execute('''SELECT LibraryID FROM Clients''')
+
+    TakenIDs = [x[0] for x in c.execute('''SELECT LibraryID FROM Clients''').fetchall()]
+    Names = ["Janek","Tomasz","Janusz","Mariusz","Szymon","Adam","Kuba","Janusz"]
+    Surnames = ["Kowalski","Polczak","Januszkiewicz","Jurgiel","Wójcik","Dąbrowski","Kamiński","Wiśniewski","Raczyk","Mazowiecki"]
+    Titles = ["Niesamowite Krzemy Tomczaka","8 centow - historia prawdziwa","Poznan nie placze","I Had some Help","Juz nie moge","Jak zostac Papiezem","Wladca obraczek","Tamten Nieznajomy","Hioppit","Moby Dykt"]
+    while n > 0:
+        Name = random.choice(Names)
+        Surname = random.choice(Surnames)
+        Title = random.choice(Titles)
+        ID = random.randint(100_000,999_999)
+        if not ID in TakenIDs:
+            n = n-1
+            TakenIDs.append(ID)
+            c.execute('''INSERT INTO Clients (Name, Surname, LibraryID, LoanedTitle) 
+                      VALUES (%s,%s,%s,%s);''',(Name,Surname,ID,Title))
     con.commit()
     c.close()
     con.close()
@@ -65,6 +96,9 @@ def CSVtoDB (BookFile, ClientFile, conJSON):
             c.execute('''INSERT INTO Clients (Name, Surname, LibraryID, LoanedTitle) 
                       VALUES (%s,%s,%s,%s);''', (row))
     con.commit()
+    c.close()
+    con.close()
+
 
 
 with open ("database_creds.json") as f:
