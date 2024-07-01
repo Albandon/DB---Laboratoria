@@ -1,5 +1,17 @@
 # DB using "application" made as an laboratory assigment 
 Requires Python 3.12 or greater and poetry 1.8 or greater
+
+##Installation:
+to install all you need to do is:
+1. Open terminal
+2. Go to directory inside downloaded repository
+3. execute following:
+```
+poetry update
+poetry shell
+python Aplikacja/App.py
+```
+
 ### Current functionality consists of:
 - adding new Entries
 - exporting the entries as .csv file
