@@ -77,7 +77,7 @@ def AddLoanEntry (connection: sqlite3.Connection, cursor: sqlite3.Cursor,Client:
     :param cursor: Kursor do bazy danych
     :type cursor: sqlite3.Cursor
     :param Client: Dane Klientów
-    :type Book: [Imię, Nazwisko, ID karty bibliotecznej, Tytuł wypożyczony]
+    :type Client: [Imię, Nazwisko, ID karty bibliotecznej, Tytuł wypożyczony]
 
     """
     Selection = Select(connection,cursor,"BookList","Title",Client[3])
