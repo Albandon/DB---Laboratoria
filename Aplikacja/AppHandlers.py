@@ -22,13 +22,6 @@ def BookHandler ():
     # title may contain different characters and numbers so no validation    
     Title = input("\tTitle: ")
 
-    # while True:
-    #     Price = input("\tPrice: ")
-    #     if Price.isdigit():
-    #         if len(Price) > 4: print ("Chyba w rublach koleszko")
-    #         break
-    #     print("Price must be a number")
-
     while True:
         Page = input("\tNumber of pages: ")
         if Page.isdigit():

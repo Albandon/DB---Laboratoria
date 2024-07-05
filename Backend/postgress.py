@@ -4,6 +4,12 @@ import simplejson
 import random
 
 def Init (conJSON):
+    """Łączy się z podaną bazą daych oraz inicjalizuje tabele na postgreSQL.
+    
+    :param conJSON: załadowany plik .json zawierający dane połącznia 
+    :type conJSON: dict
+    
+    """
     con = psycopg.connect(
         host=conJSON['host'],
         port=conJSON['port'],
@@ -12,8 +18,6 @@ def Init (conJSON):
         password=conJSON['password']
     )
     c = con.cursor()
-    c.execute('''DROP TABLE Clients''')
-    c.execute('''DROP TABLE BookList''')
     
     c.execute('''CREATE TABLE IF NOT EXISTS BookList (
         Name VARCHAR(30),
@@ -37,6 +41,14 @@ def Init (conJSON):
 
 # dla ułatwienia randomizacji ilość kopii nie będzie zmieniania dodając nowe wpisy do wypożyczeń
 def buildRandomLoanData (n: int, conJSON):
+    """ Przygotowuje zadaną ilość danych i wprowadza je do tabeli kilentów. Ważne jest by istniała wcześniej tabela `BookList` ze wszystkimi potrzebnymi tytułami
+    
+    :param n: Ilość danych
+    :type n: int
+    :param conJSON: załadowany plik .json zawierający dane połącznia 
+    :type conJSON: dict
+    
+    """
     con = psycopg.connect(
         host=conJSON['host'],
         port=conJSON['port'],
@@ -66,6 +78,17 @@ def buildRandomLoanData (n: int, conJSON):
     con.close()
 
 def CSVtoDB (BookFile, ClientFile, conJSON):
+    """ Importuje dane z plików .csv do bazy danych na postgresie. Wymaga storzonych tabeli `BookList` oraz `Clients`, należy więc wcześniej wykonać metodę **Init ()**
+    
+    :param BookFile: Nazwa, wraz z rozszerzeniem
+    :type BookFile: 'Book.csv'
+    :param ClientFile: Nazwa, wraz z rozszerzeniem
+    :type BookFile: 'Clients.csv'
+    :param conJSON: załadowany plik .json zawierający dane połącznia 
+    :type conJSON: dict
+    
+    """
+    
     con = psycopg.connect(
         host=conJSON['host'],
         port=conJSON['port'],
@@ -101,7 +124,7 @@ def CSVtoDB (BookFile, ClientFile, conJSON):
 
 
 
-with open ("database_creds.json") as f:
-    db_creds = simplejson.load(f)
-    Init(db_creds)
-    CSVtoDB("Books.csv","Clients.csv",db_creds)
+#with open ("database_creds.json") as f:
+ #   db_creds = simplejson.load(f)
+  #  Init(db_creds)
+   # CSVtoDB("Books.csv","Clients.csv",db_creds)
